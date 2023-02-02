@@ -17,11 +17,14 @@ const Login = () => {
     })
     const navigate = useNavigate()
     const loginProcess = (user: User) => {
-        axios.defaults.baseURL = 'https://basic-book-crud-e3u54evafq-et.a.run.app/api';
-        axios.post('/login', { email: user.email, password: user.password })
+        axios.post('https://basic-book-crud-e3u54evafq-et.a.run.app/api/login', { email: user.email, password: user.password })
             .then((res) => {
                 // console.log(res.data.message);
-                navigate('/')
+                localStorage.setItem('token', res.data.token)
+                return res
+            })
+            .then(() => {
+                window.location.href = "/"
             })
             .catch((err) => {
                 MySwal.fire({

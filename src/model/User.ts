@@ -33,3 +33,13 @@ export class UserRegister {
         this.name = name;
     }
 }
+
+export class UserProfile {
+    email: String;
+    name: String;
+
+    constructor(email: String, name: String) {
+        this.email = email;
+        this.name = name;
+    }
+}
