@@ -7,26 +7,23 @@ import { Button, Container } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Navbar from '../components/common/Navbar';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
     const MySwal = withReactContent(Swal)
+    const Toast = MySwal.mixin({
+        toast: true,
+    })
+    const navigate = useNavigate()
     const loginProcess = (user: User) => {
         axios.defaults.baseURL = 'https://basic-book-crud-e3u54evafq-et.a.run.app/api';
-        const formData: FormData = new FormData()
-        formData.append("email", user.email as string)
-        formData.append("password", user.password as string)
         axios.post('/login', { email: user.email, password: user.password })
             .then((res) => {
                 // console.log(res.data.message);
-                MySwal.fire({
-                    icon: 'success',
-                    title: "Success",
-                    text: res.data.message
-                })
+                navigate('/')
             })
             .catch((err) => {
-                // console.error(err.message)
                 MySwal.fire({
                     icon: 'error',
                     title: "Error",
@@ -39,10 +36,10 @@ const Login = () => {
         <div>
             <Navbar />
             <Container className='py-5'>
-                
+
                 <LoginForm onLogin={user => loginProcess(user)} />
                 <div className='clearfix mt-3'>
-                    <a href={'/register'} className="float-end">Register</a>
+                    <Link to={`/register`} className="float-end">Register</Link>
                 </div>
                 {/* <Button href={'/register'} variant="outline-primary" className='mt-3 w-100'>Register</Button> */}
             </Container>

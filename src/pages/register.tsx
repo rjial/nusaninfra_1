@@ -8,6 +8,7 @@ import { Button, Container } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Navbar from '../components/common/Navbar';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
 
@@ -40,7 +41,7 @@ const Register = () => {
             <Container className='py-5'>
                 <RegisterForm onRegister={user => registerProcess(user)} />
                 <div className='clearfix mt-3'>
-                    <a href={'/login'} className="float-end">Login</a>
+                    <Link to={`/login`} className="float-end">Login</Link>
                 </div>
             </Container>
         </div>
