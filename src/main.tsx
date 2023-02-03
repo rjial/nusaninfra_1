@@ -12,23 +12,38 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from './pages/register';
 import { isLogged } from './services/login';
 import BookIndex from './pages/book/index'
+import BookTambah from './pages/book/tambah'
+import BookDetail from './pages/book/detail'
+import BookEdit from './pages/book/edit'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: localStorage.getItem('token') != null ? <BookIndex/> : <Navigate to={'/login'}/>,
+    element: <BookIndex/>,
   },
   {
     path: "/login",
-    element: localStorage.getItem('token') != null ? <Navigate to={'/'}/> : <Login/>,
+    element: <Login/>,
   },
   {
     path: "/register",
-    element: localStorage.getItem('token') != null ? <Navigate to={'/'}/> : <Register/>,
+    element: <Register/>,
   },
   {
     path: "/buku",
-    element: localStorage.getItem('token') != null ? <BookIndex/> : <Navigate to={'/login'}/>,
+    element: <BookIndex/>,
+  },
+  {
+    path: "/buku/:bookId",
+    element: <BookDetail/>,
+  },
+  {
+    path: "/buku/tambah",
+    element: <BookTambah/>,
+  },
+  {
+    path: "/buku/edit/:bookId",
+    element: <BookEdit/>,
   },
 ]);
 

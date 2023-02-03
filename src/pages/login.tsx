@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LoginForm from '../components/login/LoginForm'
 import { User } from '../model/User'
 import { loginFunc } from '../services/login'
@@ -16,6 +16,9 @@ const Login = () => {
         toast: true,
     })
     const navigate = useNavigate()
+    useEffect(() => {
+        if (localStorage.getItem('token') != null) return navigate('/')
+    }, [])
     const loginProcess = (user: User) => {
         axios.post('https://basic-book-crud-e3u54evafq-et.a.run.app/api/login', { email: user.email, password: user.password })
             .then((res) => {
@@ -27,10 +30,11 @@ const Login = () => {
                 window.location.href = "/"
             })
             .catch((err) => {
+                console.log(err.response.data.message)
                 MySwal.fire({
                     icon: 'error',
                     title: "Error",
-                    text: err.message
+                    text: err.response.data.message || err.message
                 })
             })
     }

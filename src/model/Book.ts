@@ -1,6 +1,8 @@
+import dayjs from "dayjs"
+
 export class Book {
-    id: Number
-    user_id: Number
+    id: Number | undefined
+    user_id: Number | undefined
     isbn: String
     title: String
     subtitle: String
@@ -8,14 +10,17 @@ export class Book {
     published: String
     publisher: String
     pages: Number
-    description: Number
+    description: String
     website: String
-    created_at: String
-    updated_at: String
+    created_at: String | undefined
+    updated_at: String | undefined
+    getPublishedString() {
+        return dayjs(this.published as string).format("YYYY-MM-DD")
+    }
 
     constructor(data: any) {
-        this.id = data.id
-        this.user_id = data.id
+        this.id = data.id || undefined
+        this.user_id = data.id || undefined
         this.isbn = data.isbn
         this.title = data.title
         this.subtitle = data.subtitle
@@ -25,12 +30,23 @@ export class Book {
         this.pages = data.pages
         this.description = data.description
         this.website = data.website
-        this.created_at = data.created_at
-        this.updated_at = data.updated_at
+        this.created_at = data.created_at || undefined
+        this.updated_at = data.updated_at || undefined
+    }
+    
+}
+
+export class BookAddResponse {
+    message: String
+    data: Book
+
+    constructor(data: any) {
+        this.message = data.message
+        this.data = new Book(data.data)
     }
 }
 
-export class BookResponse {
+export class BookListResponse {
     current_page: Number
     data: Book[]
     first_page_url: String

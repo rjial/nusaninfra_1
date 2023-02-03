@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LoginForm from '../components/login/LoginForm'
 import { User, UserFull, UserRegister } from '../model/User'
 import { loginFunc } from '../services/login'
@@ -8,11 +8,15 @@ import { Button, Container } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Navbar from '../components/common/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
     const MySwal = withReactContent(Swal)
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (localStorage.getItem('token') != null) return navigate('/')
+    }, [])
     const registerProcess = (user: UserRegister) => {
         axios.defaults.baseURL = 'https://basic-book-crud-e3u54evafq-et.a.run.app/api';
 
@@ -24,9 +28,13 @@ const Register = () => {
                     title: "Success",
                     text: res.data.message
                 })
+                .then(() => {
+                    navigate('/login')
+                })
             })
             .catch((err) => {
-                // console.error(err.message)
+                console.log(err)
+                console.error(err)
                 MySwal.fire({
                     icon: 'error',
                     title: "Error",
