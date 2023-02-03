@@ -8,6 +8,7 @@ import { UserProfile } from '../../model/User';
 import axiosMid from '../../services/api';
 import { LinkContainer } from 'react-router-bootstrap'
 import { useNavigate } from 'react-router-dom';
+import { isLogged } from '../../services/login';
 
 export default () => {
     const [user, setUser] = useState<UserProfile | undefined>(undefined)
@@ -55,8 +56,6 @@ export default () => {
 
                     {statusUser && user != undefined ? <Nav>
                         <NavDropdown title={user?.name} id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.3">Profile</NavDropdown.Item>
-                            <NavDropdown.Divider />
                             <NavDropdown.Item onClick={() => logoutFunc()}>
                                 Logout
                             </NavDropdown.Item>

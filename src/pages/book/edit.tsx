@@ -7,9 +7,13 @@ import EditForm from "../../components/book/EditForm"
 import TambahForm from "../../components/book/TambahForm"
 import Navbar from "../../components/common/Navbar"
 import { Book } from "../../model/Book"
+import bookValidationSchema from '../../utilities/validation/book'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 
 export default () => {
+    const MySwal = withReactContent(Swal)
     const { bookId } = useParams()
     const [dataBook, setDataBook] = useState<Book | undefined>(undefined)
     const [loading, setLoading] = useState(true)
@@ -31,7 +35,9 @@ export default () => {
     }, [])
     const editProcess = (book: Book) => {
         console.log(book)
-        axios.put(`https://basic-book-crud-e3u54evafq-et.a.run.app/api/books/${bookId}/edit`, book, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+        bookValidationSchema.validate(book, { abortEarly: false, strict: false, })
+        .then((valid) => {
+            axios.put(`https://basic-book-crud-e3u54evafq-et.a.run.app/api/books/${bookId}/edit`, book, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(response => {
                 console.log(response)
                 return response
@@ -39,6 +45,19 @@ export default () => {
             .then(() => {
                 navigate("/")
             })
+        })
+        .catch(err => {
+            MySwal.fire({
+                icon: 'error',
+                title: "Error",
+                html: <ul>
+                    {err.errors.map((error: string) => (
+                        <li>{error}</li>
+                    ))}
+                </ul>
+            })
+        })
+        
     }
     return (
         <div>

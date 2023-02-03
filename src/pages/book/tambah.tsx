@@ -18,9 +18,9 @@ export default () => {
         if (localStorage.getItem('token') == null) return navigate('/login')
     }, [])
     const tambahProcess = (book: Book) => {
-        bookValidationSchema.isValid(book)
+        bookValidationSchema.validate(book, { abortEarly: false, strict: false, })
         .then(valid => {
-            if (valid) {
+            // console.log(valid)
                 axios.post("https://basic-book-crud-e3u54evafq-et.a.run.app/api/books/add", book, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(response => {
                     console.log(response)
@@ -28,13 +28,17 @@ export default () => {
                 .then(() => {
                     navigate("/")
                 })
-            } else {
-                MySwal.fire({
-                    icon: 'error',
-                    title: "Error",
-                    text: "Empty fields"
-                })
-            }
+        })
+        .catch(err => {
+            MySwal.fire({
+                icon: 'error',
+                title: "Error",
+                html: <ul>
+                    {err.errors.map((error: string) => (
+                        <li>{error}</li>
+                    ))}
+                </ul>
+            })
         })
 
         
