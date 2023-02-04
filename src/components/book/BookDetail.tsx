@@ -45,7 +45,7 @@ export default (props: BookDetailProps) => {
                 </Row>
                 <Row className='mt-2'>
                     <Col xl={2} md={5} sm={6}>Website</Col>
-                    <Col xl={10} md={7} sm={6}>{book.website || "-"}</Col>
+                    <Col xl={10} md={7} sm={6}>{(<a href={book.website.toString()}>{book.website}</a>) || "-"}</Col>
                 </Row>
             </Card.Body>
         </Card>

@@ -1,7 +1,7 @@
 import axios from "axios"
 import Fuse from "fuse.js"
 import { useEffect, useState } from "react"
-import { Breadcrumb, Button, Container, Form, Spinner } from "react-bootstrap"
+import { Breadcrumb, Button, Container, Form, Pagination, Spinner } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
 import { useNavigate } from "react-router-dom"
 import BookCard from "../../components/book/BookCard"
@@ -9,8 +9,12 @@ import Navbar from "../../components/common/Navbar"
 import { Book, BookListResponse } from "../../model/Book"
 import useDebounce from "../../utilities/hooks/useDebounce"
 
+
 export default () => {
     const [loading, setLoading] = useState(true)
+    const [page, setPage] = useState<Number>(1)
+    const [countPage, setCountPage] = useState<Number>(0)
+    const [bookRes, setBookRes] = useState<BookListResponse | undefined>(undefined)
     const [urlBooks, setUrlBooks] = useState("https://basic-book-crud-e3u54evafq-et.a.run.app/api/books")
     const [dataBooks, setDataBooks] = useState<Book[] | undefined>(undefined)
     const [search, setSearch] = useState<String>("")
@@ -19,10 +23,13 @@ export default () => {
     useEffect(() => {
         if (localStorage.getItem('token') == null) return navigate('/login')
     }, [])
-    const loadBook = () => {
-        axios.get(urlBooks, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+    const loadBook = (id: number = 1) => {
+        setLoading(true)
+        axios.get(`https://basic-book-crud-e3u54evafq-et.a.run.app/api/books?page=${id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(response => {
                 let data: BookListResponse = new BookListResponse(response.data)
+                setCountPage(Math.ceil(data.total/data.per_page))
+                setPage(data.current_page)
                 setDataBooks(data.data)
                 console.log(data)
             })
@@ -35,6 +42,7 @@ export default () => {
             axios.get(urlBooks, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 .then(response => {
                     let data: BookListResponse = new BookListResponse(response.data)
+                    setBookRes(data)
                     const fuse = new Fuse(data.data, {
                         keys: ["title", "author"]
                     })
@@ -90,6 +98,13 @@ export default () => {
                         ))
                     }
 
+                </div>
+                <div className="mt-3 d-flex align-items-center w-100 justify-content-center">
+                    <Pagination>
+                        {Array.apply(1, Array(countPage)).map((x, i) => (
+                            <Pagination.Item onClick={() => loadBook(i+1)} active={i+1 === page}>{i+1}</Pagination.Item>
+                        ))}
+                    </Pagination>
                 </div>
             </Container>
         </div>

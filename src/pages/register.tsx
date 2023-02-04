@@ -19,6 +19,7 @@ const Register = () => {
         if (localStorage.getItem('token') != null) return navigate('/')
     }, [])
     const registerProcess = (user: UserRegister) => {
+        console.log(user)
         registerValidationSchema.validate({ email: user.email, password: user.password, password_confirmation: user.passwordConf, name: user.name }, { abortEarly: false, strict: false, })
             .then(valid => {
                     axios.post('https://basic-book-crud-e3u54evafq-et.a.run.app/api/register', { email: user.email, password: user.password, password_confirmation: user.passwordConf, name: user.name })

@@ -8,9 +8,8 @@ export const loginFunc = (user: User) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState('');
     const [loading, setloading] = useState(true);
-    axios.defaults.baseURL = 'https://basic-book-crud-e3u54evafq-et.a.run.app/api';
     useEffect(() => {
-        axios.post('/login', JSON.stringify({ email: user.email, password: user.password }))
+        axios.post('https://basic-book-crud-e3u54evafq-et.a.run.app/api/login', JSON.stringify({ email: user.email, password: user.password }))
             .then((res) => {
                 setResponse(res.data);
             })

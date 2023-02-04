@@ -47,18 +47,18 @@ export class BookAddResponse {
 }
 
 export class BookListResponse {
-    current_page: Number
+    current_page: number
     data: Book[]
     first_page_url: String
-    from: Number
-    last_page: Number
+    from: number
+    last_page: number
     last_page_url: String
     next_page_url: String
     path: String
-    per_page: Number
+    per_page: number
     prev_page_url: String
-    to: Number
-    total: Number
+    to: number
+    total: number
     constructor(data: any) {
         this.current_page = data.current_page
         this.data = (data.data as Array<Book>).map(item => new Book(item))
